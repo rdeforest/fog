@@ -1,0 +1,66 @@
+#!/usr/bin/env coffee
+
+app   = require '../app'
+debug = require('debug') 'fog:server'
+http  = require 'http'
+
+capitalize = (s) ->
+  if s
+    s[0].toUpperCase() + s[1..]
+  else
+    ''
+
+portToString = (p) ->
+  if 'string' is typeof p
+    "pipe #{p}"
+  else if s?.port
+    "port #{s.port}"
+  else
+    "port #{p}"
+
+normalizePort = (val) ->
+  `var port`
+  port = parseInt val, 10
+
+  if isNaN port
+    return val # named pipe
+
+  if port < 0
+    throw new Error "Port number '#{val}' is invalid"
+
+  return port
+
+onError = (error) ->
+  if error.syscall != 'listen'
+    throw error
+
+  bind = capitalize portToString port
+
+  # handle specific listen errors with friendly messages
+  switch error.code
+    when 'EACCES'
+      console.error bind + ' requires elevated privileges'
+      process.exit 1
+
+    when 'EADDRINUSE'
+      console.error bind + ' is already in use'
+      process.exit 1
+
+    else
+      throw error
+
+  return
+
+onListening = ->
+  addr = server.address()
+  bind = portToString port
+  debug 'Listening on ' + bind
+  return
+
+app.set 'port', port = normalizePort process.env.PORT or '3000'
+
+server = http.createServer app
+
+server.listen port
+server.on 'error',     onError
+server.on 'listening', onListening
