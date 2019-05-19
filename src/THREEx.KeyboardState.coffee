@@ -1,42 +1,5 @@
-# THREEx.KeyboardState.js keep the current state of the keyboard.
-# It is possible to query it at any time. No need of an event.
-# This is particularly convenient in loop driven case, like in
-# 3D demos or games.
-#
-# # Usage
-#
-# **Step 1**: Create the object
-#
-# ```var keyboard	= new THREEx.KeyboardState();```
-#
-# **Step 2**: Query the keyboard state
-#
-# This will return true if shift and A are pressed, false otherwise
-#
-# ```keyboard.pressed("shift+A")```
-#
-# **Step 3**: Stop listening to the keyboard
-#
-# ```keyboard.destroy()```
-#
-# NOTE: this library may be nice as standaline. independant from three.js
-# - rename it keyboardForGame
-#
-# # Code
-#
-
-###* @namespace ###
-
 THREEx = THREEx or {}
 
-###*
-# - NOTE: it would be quite easy to push event-driven too
-#   - microevent.js for events handling
-#   - in this._onkeyChange, generate a string from the DOM event
-#   - use this as event name
-###
-
-#THREEx.KeyboardState = ->
 class THREEx.KeyboardState
   constructor: ->
     # to store the current state
@@ -54,15 +17,15 @@ class THREEx.KeyboardState
       return
 
     # bind keyEvents
-    document.addEventListener 'keydown', @_onKeyDown, false
-    document.addEventListener 'keyup',   @_onKeyUp,   false
+    document.addEventListener 'keydown', @_onKeyDown
+    document.addEventListener 'keyup',   @_onKeyUp
 
 # To stop listening of the keyboard events
 
   destroy: ->
     # unbind keyEvents
-    document.removeEventListener 'keydown', @_onKeyDown, false
-    document.removeEventListener 'keyup',   @_onKeyUp,   false
+    document.removeEventListener 'keydown', @_onKeyDown
+    document.removeEventListener 'keyup',   @_onKeyUp
     return
 
   @MODIFIERS = [
@@ -85,9 +48,6 @@ class THREEx.KeyboardState
 # to process the keyboard dom event
 
   _onKeyChange: (event, pressed) ->
-    # log to debug
-    #console.log("onKeyChange", event, pressed, event.keyCode, event.shiftKey, event.ctrlKey, event.altKey, event.metaKey)
-    
     # update this.keyCodes
     keyCode = event.keyCode
     @keyCodes[keyCode] = pressed
