@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node_modules/coffeescript/bin/coffee bin/www"
   },
   "dependencies": {
+    "coffeescript": "*",
     "cookie-parser": "*",
     "debug": "*",
     "express": "*",
